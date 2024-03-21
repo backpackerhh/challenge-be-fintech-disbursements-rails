@@ -1,6 +1,7 @@
 APP_ENV := development
 DB_NAME := challenge_be_sequra_$(APP_ENV)
 DB_USER := postgres
+TEST_PATH := spec
 
 db-connect:
 	@docker compose exec db psql -U $(DB_USER) -d $(DB_NAME)
@@ -41,3 +42,6 @@ logs:
 
 lint:
 	@docker compose exec app rubocop
+
+test:
+	@docker compose exec app rspec ${TEST_PATH}
