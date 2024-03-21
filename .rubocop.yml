@@ -16,10 +16,25 @@ Style/StringLiterals:
 Style/Documentation:
   Enabled: false
 
+Style/NegatedIf:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: true
+  Exclude:
+    - app/contexts/shared_context/value_objects/base_value_object.rb
+
 Style/IfUnlessModifier:
   Enabled: true
   Exclude:
     - lib/tasks/payments_context/merchants/import_data.rake
+
+# Metrics
+
+Metrics/ParameterLists:
+  Enabled: true
+  Exclude:
+    - app/contexts/**/entities/*_entity.rb
 
 # RSpec
 
@@ -37,3 +52,15 @@ RSpec/ContextWording:
   Enabled: true
   Exclude:
     - spec/support/shared_contexts/rake.rb
+
+RSpec/ExampleLength:
+  Enabled: true
+  CountAsOne: ["array", "hash", "method_call", "heredoc"]
+  Max: 10
+
+RSpec/MessageSpies:
+  Enabled: true
+  EnforcedStyle: receive
+
+RSpec/Rails/TravelAround:
+  Enabled: false
