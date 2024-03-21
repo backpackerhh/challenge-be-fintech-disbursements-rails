@@ -22,6 +22,6 @@ RSpec.describe "payments_context:merchants:import_data", type: %i[task database]
 
     expect do
       task.invoke("spec/support/data/merchants.csv")
-    end.to(change { repository.size }).from(0).to(4)
+    end.to(change { repository.size }.from(0).to(4))
   end
 end
