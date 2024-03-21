@@ -18,6 +18,9 @@ db-migrate:
 db-rollback:
 	@docker compose exec app rails db:rollback RAILS_ENV=$(APP_ENV) STEP=$(STEPS)
 
+db-import-data:
+	@docker compose exec app rake payments_context:merchants:import_data\[db/data/merchants.csv\]
+
 start:
 	@docker compose up --build -d $(SERVICES)
 
@@ -45,3 +48,11 @@ lint:
 
 test:
 	@docker compose exec app rspec ${TEST_PATH}
+
+tasks:
+	@docker compose exec app rake -vT
+
+# Do not run from integrated terminal in VSCodium
+# control + p, control + q for ending the debugging session
+debug:
+	@docker attach $$(docker compose ps -q ${SERVICE})

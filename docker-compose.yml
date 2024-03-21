@@ -20,6 +20,25 @@ services:
       - .:/usr/app
     depends_on:
       - db
+      - redis
+
+  redis:
+    image: redis:7.2.4-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+  sidekiq:
+    image: challenge-be-sequra
+    restart: unless-stopped
+    command: bundle exec sidekiq
+    stdin_open: true
+    tty: true
+    volumes:
+      - redis-data:/data
+    depends_on:
+      - redis
 
 volumes:
   postgres-data:
+  redis-data:

@@ -15,3 +15,25 @@ Style/StringLiterals:
 
 Style/Documentation:
   Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: true
+  Exclude:
+    - lib/tasks/payments_context/merchants/import_data.rake
+
+# RSpec
+
+RSpec/DescribeClass:
+  Enabled: true
+  Exclude:
+    - spec/lib/tasks/**/*
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: true
+  Exclude:
+    - spec/support/shared_contexts/rake.rb
+
+RSpec/ContextWording:
+  Enabled: true
+  Exclude:
+    - spec/support/shared_contexts/rake.rb

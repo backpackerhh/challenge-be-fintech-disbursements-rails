@@ -4,8 +4,16 @@ source "https://rubygems.org"
 
 ruby file: ".ruby-version"
 
-gem "pg", "~> 1.1"
 gem "rails", "7.1.3.2"
+
+# Databases
+gem "pg", "~> 1.1"
+
+# Background jobs
+gem "sidekiq", "~> 7.2"
+
+# CSV
+gem "smarter_csv", "~> 1.10"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
