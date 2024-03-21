@@ -38,3 +38,6 @@ console:
 
 logs:
 	@docker compose logs $(SERVICE) -f
+
+lint:
+	@docker compose exec app rubocop
