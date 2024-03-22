@@ -3,7 +3,7 @@
 module PaymentsContext
   module Merchants
     module Factories
-      class MerchantMinimumMonthlyFeeFactory
+      class MerchantMinimumMonthlyFeeValueObjectFactory
         def self.build(value = rand(20))
           value
         end

@@ -3,8 +3,8 @@
 module PaymentsContext
   module Merchants
     module Factories
-      class MerchantIdFactory
-        def self.build(value = SecureRandom.uuid)
+      class MerchantReferenceValueObjectFactory
+        def self.build(value = Faker::Internet.unique.username)
           value
         end
       end

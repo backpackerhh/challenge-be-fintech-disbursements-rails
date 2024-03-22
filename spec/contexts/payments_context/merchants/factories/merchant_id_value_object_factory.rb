@@ -3,8 +3,8 @@
 module PaymentsContext
   module Merchants
     module Factories
-      class MerchantCreatedAtFactory
-        def self.build(value = Time.current)
+      class MerchantIdValueObjectFactory
+        def self.build(value = SecureRandom.uuid)
           value
         end
       end

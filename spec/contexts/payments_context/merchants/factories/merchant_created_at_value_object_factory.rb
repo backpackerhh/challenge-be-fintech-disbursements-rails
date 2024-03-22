@@ -3,8 +3,8 @@
 module PaymentsContext
   module Merchants
     module Factories
-      class MerchantEmailFactory
-        def self.build(value = Faker::Internet.email)
+      class MerchantCreatedAtValueObjectFactory
+        def self.build(value = Time.current)
           value
         end
       end

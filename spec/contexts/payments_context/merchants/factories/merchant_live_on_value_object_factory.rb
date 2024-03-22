@@ -3,7 +3,7 @@
 module PaymentsContext
   module Merchants
     module Factories
-      class MerchantLiveOnFactory
+      class MerchantLiveOnValueObjectFactory
         def self.build(value = Date.yesterday)
           value
         end

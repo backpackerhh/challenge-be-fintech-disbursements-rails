@@ -3,7 +3,7 @@
 module PaymentsContext
   module Merchants
     module Factories
-      class MerchantDisbursementFrequencyFactory
+      class MerchantDisbursementFrequencyValueObjectFactory
         def self.build(value = ValueObjects::MerchantDisbursementFrequencyValueObject::ALLOWED_VALUES.sample)
           value
         end

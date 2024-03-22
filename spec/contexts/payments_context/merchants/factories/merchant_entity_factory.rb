@@ -6,20 +6,20 @@ module PaymentsContext
       class MerchantEntityFactory
         FactoryBot.define do
           factory :payments_merchant, class: "PaymentsContext::Merchants::Records::MerchantRecord" do
-            id { MerchantIdFactory.build }
-            reference { MerchantReferenceFactory.build }
-            email { MerchantEmailFactory.build }
-            disbursement_frequency { MerchantDisbursementFrequencyFactory.build }
-            live_on { MerchantLiveOnFactory.build }
-            minimum_monthly_fee { MerchantMinimumMonthlyFeeFactory.build }
-            created_at { MerchantCreatedAtFactory.build }
+            id { MerchantIdValueObjectFactory.build }
+            reference { MerchantReferenceValueObjectFactory.build }
+            email { MerchantEmailValueObjectFactory.build }
+            disbursement_frequency { MerchantDisbursementFrequencyValueObjectFactory.build }
+            live_on { MerchantLiveOnValueObjectFactory.build }
+            minimum_monthly_fee { MerchantMinimumMonthlyFeeValueObjectFactory.build }
+            created_at { MerchantCreatedAtValueObjectFactory.build }
 
             trait :weekly_disbursement do |m|
-              m.disbursement_frequency { MerchantDisbursementFrequencyFactory.weekly }
+              m.disbursement_frequency { MerchantDisbursementFrequencyValueObjectFactory.weekly }
             end
 
             trait :daily_disbursement do |m|
-              m.disbursement_frequency { MerchantDisbursementFrequencyFactory.daily }
+              m.disbursement_frequency { MerchantDisbursementFrequencyValueObjectFactory.daily }
             end
           end
         end
