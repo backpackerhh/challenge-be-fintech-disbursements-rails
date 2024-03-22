@@ -23,6 +23,10 @@ db-import-data:
 	@docker compose exec app rake payments_context:merchants:import_data\[db/data/merchants.csv\]
 	@docker compose exec app rake payments_context:orders:import_data\[db/data/orders.csv\]
 
+db-generate-dump:
+	@docker compose exec db pg_dump -U $(DB_USER) $(DB_NAME) > db/dump.sql
+	@echo "DB dump generated"
+
 start:
 	@docker compose up --build -d $(SERVICES)
 
