@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_21_150819) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_21_204309) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -30,4 +30,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_21_150819) do
     t.index ["reference"], name: "index_payments_merchants_on_reference", unique: true
   end
 
+  create_table "payments_orders", id: :uuid, default: nil, force: :cascade do |t|
+    t.string "reference", null: false
+    t.integer "amount_cents", default: 0, null: false
+    t.uuid "payments_merchant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payments_merchant_id"], name: "index_payments_orders_on_payments_merchant_id"
+    t.index ["reference"], name: "index_payments_orders_on_reference", unique: true
+  end
+
+  add_foreign_key "payments_orders", "payments_merchants"
 end

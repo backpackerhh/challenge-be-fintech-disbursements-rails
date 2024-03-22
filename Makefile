@@ -2,6 +2,7 @@ APP_ENV := development
 DB_NAME := challenge_be_sequra_$(APP_ENV)
 DB_USER := postgres
 TEST_PATH := spec
+STEPS := 1
 
 db-connect:
 	@docker compose exec db psql -U $(DB_USER) -d $(DB_NAME)

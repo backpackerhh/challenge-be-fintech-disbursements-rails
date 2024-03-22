@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "spec_helper"
+require "rails_helper"
 
 RSpec.describe PaymentsContext::Merchants::Repositories::PostgresMerchantRepository, type: %i[repository database] do
   describe "#create(attributes)" do
