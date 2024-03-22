@@ -82,4 +82,7 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # Custom settings
+  config.x.redis_url = "redis://:secret@redis:6379/0" # FIXME: Move to env variable
 end

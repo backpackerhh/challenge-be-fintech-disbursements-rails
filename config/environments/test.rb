@@ -53,4 +53,7 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Custom settings
+  config.x.redis_url = "redis://:secret@redis:6379/0"
 end
