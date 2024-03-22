@@ -85,4 +85,5 @@ Rails.application.configure do
 
   # Custom settings
   config.x.redis_url = "redis://:secret@redis:6379/0" # FIXME: Move to env variable
+  config.x.payments_context.import_orders_chunk_size = 1000
 end

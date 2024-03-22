@@ -56,4 +56,5 @@ Rails.application.configure do
 
   # Custom settings
   config.x.redis_url = "redis://:secret@redis:6379/0"
+  config.x.payments_context.import_orders_chunk_size = 2
 end

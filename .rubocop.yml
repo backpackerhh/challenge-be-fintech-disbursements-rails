@@ -27,7 +27,7 @@ Style/GuardClause:
 Style/IfUnlessModifier:
   Enabled: true
   Exclude:
-    - lib/tasks/payments_context/merchants/import_data.rake
+    - lib/tasks/payments_context/**/*.rake
 
 # Metrics
 
@@ -35,6 +35,18 @@ Metrics/ParameterLists:
   Enabled: true
   Exclude:
     - app/contexts/**/entities/*_entity.rb
+
+Metrics/MethodLength:
+  Enabled: true
+  CountAsOne: ["array", "hash", "method_call", "heredoc"]
+  Exclude:
+    - app/contexts/payments_context/orders/jobs/import_orders_job.rb
+
+Metrics/AbcSize:
+  Enabled: true
+  CountRepeatedAttributes: false
+  Exclude:
+    - app/contexts/payments_context/orders/jobs/import_orders_job.rb
 
 # RSpec
 

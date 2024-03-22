@@ -20,6 +20,7 @@ db-rollback:
 
 db-import-data:
 	@docker compose exec app rake payments_context:merchants:import_data\[db/data/merchants.csv\]
+	@docker compose exec app rake payments_context:orders:import_data\[db/data/orders.csv\]
 
 start:
 	@docker compose up --build -d $(SERVICES)
