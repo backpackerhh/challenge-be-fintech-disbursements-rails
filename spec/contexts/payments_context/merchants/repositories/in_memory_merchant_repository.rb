@@ -4,6 +4,8 @@ module PaymentsContext
   module Merchants
     module Repositories
       class InMemoryMerchantRepository
+        def all; end
+
         def create(_attributes); end
 
         def size; end

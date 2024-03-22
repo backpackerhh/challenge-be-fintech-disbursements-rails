@@ -4,8 +4,14 @@ module PaymentsContext
   module Merchants
     module Services
       class FindAllMerchantsService
+        attr_reader :repository
+
+        def initialize(repository: Repositories::PostgresMerchantRepository.new)
+          @repository = repository
+        end
+
         def find_all
-          [] # TODO
+          repository.all
         end
       end
     end

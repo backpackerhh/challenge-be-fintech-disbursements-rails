@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "spec_helper"
+require "rails_helper"
 
 RSpec.describe PaymentsContext::Orders::UseCases::CreateOrderUseCase, type: :use_case do
   describe "#create(attributes)" do
