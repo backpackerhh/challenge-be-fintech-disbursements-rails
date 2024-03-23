@@ -4,7 +4,8 @@ module PaymentsContext
   module Orders
     module ValueObjects
       class OrderReferenceValueObject < SharedContext::ValueObjects::StringValueObject
-        value_type Types::Strict::String.constrained(size: 12)
+        # NOTE: The range below tries to successfully handle some references included in the CSV file
+        value_type Types::Coercible::String.constrained(size: 9..12)
       end
     end
   end

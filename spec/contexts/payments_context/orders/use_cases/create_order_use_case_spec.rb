@@ -50,22 +50,22 @@ RSpec.describe PaymentsContext::Orders::UseCases::CreateOrderUseCase, type: :use
 
       it "does not create order (invalid merchant ID)" do
         expect do
-          described_class.new(repository:,
-                              create_order_commission_job_klass:).create(attributes.merge("merchant_id" => "uuid"))
+          described_class.new(repository:, create_order_commission_job_klass:)
+                         .create(attributes.merge("merchant_id" => "uuid"))
         end.to raise_error(SharedContext::Errors::InvalidArgumentError, /invalid type.+uuid_v4.+failed/)
       end
 
       it "does not create order (invalid reference)" do
         expect do
-          described_class.new(repository:,
-                              create_order_commission_job_klass:).create(attributes.merge("reference" => 123))
-        end.to raise_error(SharedContext::Errors::InvalidArgumentError, /invalid type.+String.+failed/)
+          described_class.new(repository:, create_order_commission_job_klass:)
+                         .create(attributes.merge("reference" => 123))
+        end.to raise_error(SharedContext::Errors::InvalidArgumentError, /invalid type.+size.+failed/)
       end
 
       it "does not create order (invalid amount)" do
         expect do
-          described_class.new(repository:,
-                              create_order_commission_job_klass:).create(attributes.merge("amount" => "free"))
+          described_class.new(repository:, create_order_commission_job_klass:)
+                         .create(attributes.merge("amount" => "free"))
         end.to raise_error(SharedContext::Errors::InvalidArgumentError, /invalid type.+decimal failed/)
       end
 
