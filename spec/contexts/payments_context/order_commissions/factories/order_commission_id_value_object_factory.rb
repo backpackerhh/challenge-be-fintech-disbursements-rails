@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module PaymentsContext
-  module Orders
+  module OrderCommissions
     module Factories
-      class OrderCreatedAtValueObjectFactory
-        def self.build(value = Time.current)
+      class OrderCommissionIdValueObjectFactory
+        def self.build(value = SecureRandom.uuid)
           value
         end
       end

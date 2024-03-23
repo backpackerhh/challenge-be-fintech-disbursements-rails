@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_21_204309) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_23_114919) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -30,6 +30,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_21_204309) do
     t.index ["reference"], name: "index_payments_merchants_on_reference", unique: true
   end
 
+  create_table "payments_order_commissions", id: :uuid, default: nil, force: :cascade do |t|
+    t.integer "amount_cents", default: 0, null: false
+    t.integer "order_amount_cents", default: 0, null: false
+    t.uuid "payments_order_id", null: false
+    t.decimal "fee", precision: 10, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payments_order_id"], name: "index_payments_order_commissions_on_payments_order_id", unique: true
+  end
+
   create_table "payments_orders", id: :uuid, default: nil, force: :cascade do |t|
     t.string "reference", null: false
     t.integer "amount_cents", default: 0, null: false
@@ -40,5 +50,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_21_204309) do
     t.index ["reference"], name: "index_payments_orders_on_reference", unique: true
   end
 
+  add_foreign_key "payments_order_commissions", "payments_orders"
   add_foreign_key "payments_orders", "payments_merchants"
 end

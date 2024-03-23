@@ -18,7 +18,7 @@ RSpec.describe "payments_context:orders:import_data", type: %i[task database] do
   end
 
   it "imports orders from given file", :sidekiq_inline do
-    repository = PaymentsContext::Orders::Repositories::PostgresOrderRepository.new
+    order_repository = PaymentsContext::Orders::Repositories::PostgresOrderRepository.new
 
     PaymentsContext::Merchants::Factories::MerchantEntityFactory.create(reference: "padberg_group")
     PaymentsContext::Merchants::Factories::MerchantEntityFactory.create(reference: "deckow_gibson")
@@ -26,6 +26,19 @@ RSpec.describe "payments_context:orders:import_data", type: %i[task database] do
 
     expect do
       task.invoke("spec/support/data/orders.csv")
-    end.to(change { repository.size }.from(0).to(6))
+    end.to(change { order_repository.size }.from(0).to(6))
+  end
+
+  # FIXME: remove this example if domain event is used instead of a job from another module
+  it "generates order commissions for each order created", :sidekiq_inline do
+    order_commission_repository = PaymentsContext::OrderCommissions::Repositories::PostgresOrderCommissionRepository.new
+
+    PaymentsContext::Merchants::Factories::MerchantEntityFactory.create(reference: "padberg_group")
+    PaymentsContext::Merchants::Factories::MerchantEntityFactory.create(reference: "deckow_gibson")
+    PaymentsContext::Merchants::Factories::MerchantEntityFactory.create(reference: "romaguera_and_sons")
+
+    expect do
+      task.invoke("spec/support/data/orders.csv")
+    end.to(change { order_commission_repository.size }.from(0).to(6))
   end
 end

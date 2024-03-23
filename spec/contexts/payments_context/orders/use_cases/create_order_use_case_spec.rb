@@ -5,6 +5,7 @@ require "rails_helper"
 RSpec.describe PaymentsContext::Orders::UseCases::CreateOrderUseCase, type: :use_case do
   describe "#create(attributes)" do
     let(:repository) { PaymentsContext::Orders::Repositories::InMemoryOrderRepository.new }
+    let(:create_order_commission_job_klass) { PaymentsContext::OrderCommissions::Jobs::CreateOrderCommissionJob }
     let(:attributes) do
       {
         "id" => "0df9c70e-142f-4960-859f-30aa14f8e103",
@@ -27,38 +28,50 @@ RSpec.describe PaymentsContext::Orders::UseCases::CreateOrderUseCase, type: :use
           }
         )
 
-        described_class.new(repository:).create(attributes)
+        described_class.new(repository:, create_order_commission_job_klass:).create(attributes)
+      end
+
+      it "enqueues job to create associated order commission" do
+        expect(create_order_commission_job_klass).to receive(:perform_async).with(
+          "0df9c70e-142f-4960-859f-30aa14f8e103",
+          "102.29"
+        )
+
+        described_class.new(repository:, create_order_commission_job_klass:).create(attributes)
       end
     end
 
     context "with invalid attributes" do
       it "does not create order (invalid ID)" do
         expect do
-          described_class.new(repository:).create(attributes.merge("id" => "uuid"))
+          described_class.new(repository:, create_order_commission_job_klass:).create(attributes.merge("id" => "uuid"))
         end.to raise_error(SharedContext::Errors::InvalidArgumentError, /invalid type.+uuid_v4.+failed/)
       end
 
       it "does not create order (invalid merchant ID)" do
         expect do
-          described_class.new(repository:).create(attributes.merge("merchant_id" => "uuid"))
+          described_class.new(repository:,
+                              create_order_commission_job_klass:).create(attributes.merge("merchant_id" => "uuid"))
         end.to raise_error(SharedContext::Errors::InvalidArgumentError, /invalid type.+uuid_v4.+failed/)
       end
 
       it "does not create order (invalid reference)" do
         expect do
-          described_class.new(repository:).create(attributes.merge("reference" => 123))
+          described_class.new(repository:,
+                              create_order_commission_job_klass:).create(attributes.merge("reference" => 123))
         end.to raise_error(SharedContext::Errors::InvalidArgumentError, /invalid type.+String.+failed/)
       end
 
       it "does not create order (invalid amount)" do
         expect do
-          described_class.new(repository:).create(attributes.merge("amount" => "free"))
+          described_class.new(repository:,
+                              create_order_commission_job_klass:).create(attributes.merge("amount" => "free"))
         end.to raise_error(SharedContext::Errors::InvalidArgumentError, /invalid type.+decimal failed/)
       end
 
       it "does not create order (invalid created at time)" do
         expect do
-          described_class.new(repository:)
+          described_class.new(repository:, create_order_commission_job_klass:)
                          .create(attributes.merge("created_at" => "yesterday"))
         end.to raise_error(SharedContext::Errors::InvalidArgumentError, /invalid type.+time.+failed/)
       end
