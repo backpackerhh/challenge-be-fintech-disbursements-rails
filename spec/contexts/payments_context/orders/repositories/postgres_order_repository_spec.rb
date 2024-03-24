@@ -3,6 +3,29 @@
 require "rails_helper"
 
 RSpec.describe PaymentsContext::Orders::Repositories::PostgresOrderRepository, type: %i[repository database] do
+  describe "#all" do
+    it "returns empty array without any orders" do
+      repository = described_class.new
+
+      orders = repository.all
+
+      expect(orders).to eq([])
+    end
+
+    it "returns all orders" do
+      repository = described_class.new
+      merchant_a = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create(reference: "A")
+      order_1 = PaymentsContext::Orders::Factories::OrderEntityFactory.create(merchant_id: merchant_a.id.value)
+      order_2 = PaymentsContext::Orders::Factories::OrderEntityFactory.create(merchant_id: merchant_a.id.value)
+      merchant_b = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create(reference: "B")
+      order_3 = PaymentsContext::Orders::Factories::OrderEntityFactory.create(merchant_id: merchant_b.id.value)
+
+      orders = repository.all
+
+      expect(orders).to contain_exactly(order_1, order_2, order_3)
+    end
+  end
+
   describe "#create(attributes)" do
     context "with merchant not found" do
       it "raises an exception" do
@@ -266,6 +289,30 @@ RSpec.describe PaymentsContext::Orders::Repositories::PostgresOrderRepository, t
           ]
         )
       end
+    end
+  end
+
+  describe "#bulk_update_disbursed(order_ids, disbursement_id)" do
+    it "updates disbursement associated to all given orders" do
+      repository = described_class.new
+      merchant = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create
+      order_a = PaymentsContext::Orders::Factories::OrderEntityFactory.create(
+        merchant_id: merchant.id.value,
+        disbursement_id: nil
+      )
+      order_b = PaymentsContext::Orders::Factories::OrderEntityFactory.create(
+        merchant_id: merchant.id.value,
+        disbursement_id: nil
+      )
+      disbursement = PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.create(
+        merchant_id: merchant.id.value
+      )
+
+      repository.bulk_update_disbursed([order_a.id.value, order_b.id.value], disbursement.id.value)
+
+      disbursement_ids = repository.all.map { |o| o.disbursement_id.value }
+
+      expect(disbursement_ids).to eq([disbursement.id.value, disbursement.id.value])
     end
   end
 end

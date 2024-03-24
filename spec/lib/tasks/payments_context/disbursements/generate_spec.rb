@@ -318,5 +318,11 @@ RSpec.describe "payments_context:disbursements:generate", type: %i[task database
         [merchant_e_order_1.id.value, merchant_e_order_2.id.value]
       ]
     )
+
+    repository = PaymentsContext::Orders::Repositories::PostgresOrderRepository.new
+    orders_with_disbursement_id = repository.all.filter_map { |o| o.disbursement_id.value }
+
+    # FIXME: remove this example if domain event is used instead of a job from another module
+    expect(orders_with_disbursement_id.size).to eq(11)
   end
 end

@@ -100,3 +100,8 @@ RSpec/MessageSpies:
 
 RSpec/Rails/TravelAround:
   Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: true
+  Exclude:
+    - spec/lib/tasks/payments_context/disbursements/generate_spec.rb
