@@ -6,7 +6,9 @@ WORKDIR /usr/app
 
 COPY Gemfile* .ruby-version ./
 
-RUN apt-get update -qq && apt-get install -y postgresql-client
+RUN apt-get update -qq && apt-get install -y postgresql-client cron
 RUN bundle install
 
 COPY . .
+
+RUN whenever --update-crontab

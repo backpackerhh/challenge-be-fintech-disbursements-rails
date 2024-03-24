@@ -62,3 +62,12 @@ tasks:
 # control + p, control + q for ending the debugging session
 debug:
 	@docker attach $$(docker compose ps -q ${SERVICE})
+
+update-cron:
+	@docker compose exec app whenever --update-crontab --set environment=${APP_ENV}
+
+check-cron:
+	@docker compose exec app crontab -l
+
+clear-cron:
+	@docker compose exec app whenever --clear-crontab --set environment=${APP_ENV}

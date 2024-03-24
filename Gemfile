@@ -12,6 +12,9 @@ gem "pg", "~> 1.1"
 # Background jobs
 gem "sidekiq", "~> 7.2"
 
+# Cron
+gem "whenever", "~> 1.0", require: false
+
 # CSV
 gem "smarter_csv", "~> 1.10"
 
