@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
 module PaymentsContext
-  module Orders
+  module Disbursements
     module Repositories
-      class InMemoryOrderRepository
+      class InMemoryDisbursementRepository
+        def all; end
+
         def create(_attributes); end
 
         def size; end
 
-        def group_all_disbursable(_grouping_type, _merchant_id); end
+        def find_all_grouped_disbursable_ids; end
       end
     end
   end

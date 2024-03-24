@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_23_114919) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_24_102556) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -18,6 +18,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_23_114919) do
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "payments_merchant_disbursement_frequency_enum", ["DAILY", "WEEKLY"]
+
+  create_table "payments_disbursements", id: :uuid, default: nil, force: :cascade do |t|
+    t.string "reference", null: false
+    t.integer "amount_cents", default: 0, null: false
+    t.integer "commissions_amount_cents", default: 0, null: false
+    t.uuid "payments_merchant_id", null: false
+    t.uuid "order_ids", null: false, array: true
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payments_merchant_id"], name: "index_payments_disbursements_on_payments_merchant_id"
+    t.index ["reference"], name: "index_payments_disbursements_on_reference", unique: true
+  end
 
   create_table "payments_merchants", id: :uuid, default: nil, force: :cascade do |t|
     t.string "email", null: false
@@ -46,10 +60,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_23_114919) do
     t.uuid "payments_merchant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "payments_disbursement_id"
+    t.index ["payments_disbursement_id"], name: "index_payments_orders_on_payments_disbursement_id"
     t.index ["payments_merchant_id"], name: "index_payments_orders_on_payments_merchant_id"
     t.index ["reference"], name: "index_payments_orders_on_reference", unique: true
   end
 
+  add_foreign_key "payments_disbursements", "payments_merchants"
   add_foreign_key "payments_order_commissions", "payments_orders"
+  add_foreign_key "payments_orders", "payments_disbursements"
   add_foreign_key "payments_orders", "payments_merchants"
 end

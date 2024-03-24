@@ -47,6 +47,27 @@ Metrics/AbcSize:
   CountRepeatedAttributes: false
   Exclude:
     - app/contexts/payments_context/orders/jobs/import_orders_job.rb
+    - app/contexts/payments_context/disbursements/entities/disbursement_entity.rb
+
+# Naming
+
+Naming/VariableNumber:
+  Enabled: true
+  EnforcedStyle: snake_case
+  AllowedIdentifiers: ["uuid_v4"]
+
+# Lint
+
+Lint/UselessAssignment:
+  Enabled: true
+  Exclude:
+    - spec/contexts/payments_context/merchants/repositories/postgres_merchant_repository_spec.rb
+
+# Rails
+
+Rails/SkipsModelValidations:
+  Enabled: true
+  AllowedMethods: ["update_all"]
 
 # RSpec
 
@@ -69,6 +90,9 @@ RSpec/ExampleLength:
   Enabled: true
   CountAsOne: ["array", "hash", "method_call", "heredoc"]
   Max: 10
+  Exclude:
+    - spec/lib/tasks/payments_context/disbursements/generate_spec.rb
+    - spec/contexts/payments_context/orders/repositories/postgres_order_repository_spec.rb
 
 RSpec/MessageSpies:
   Enabled: true

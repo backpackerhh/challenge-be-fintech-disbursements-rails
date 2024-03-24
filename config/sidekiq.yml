@@ -1,9 +1,8 @@
 ---
-:concurrency: 5
-staging:
-  :concurrency: 10
+:concurrency: 10
 production:
-  :concurrency: 15
+  :concurrency: 20
 :queues:
+  - [disbursements, 3]
   - [import_data, 2]
   - default

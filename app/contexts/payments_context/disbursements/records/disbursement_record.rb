@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 module PaymentsContext
-  module Orders
+  module Disbursements
     module Records
-      class OrderRecord < SharedContext::Records::ApplicationRecord
-        self.table_name = "payments_orders"
+      class DisbursementRecord < SharedContext::Records::ApplicationRecord
+        self.table_name = "payments_disbursements"
 
         monetize :amount_cents, disable_validation: true
+        monetize :commissions_amount_cents, disable_validation: true
 
         alias_attribute :merchant_id, :payments_merchant_id
-        alias_attribute :disbursement_id, :payments_disbursement_id
       end
     end
   end

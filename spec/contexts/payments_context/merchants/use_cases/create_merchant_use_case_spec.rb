@@ -17,7 +17,7 @@ RSpec.describe PaymentsContext::Merchants::UseCases::CreateMerchantUseCase, type
     end
 
     context "with valid attributes" do
-      it "creates merchant", :freeze_time do
+      it "creates merchant", freeze_time: Time.current do
         expect(repository).to receive(:create).with(
           {
             id: "86312006-4d7e-45c4-9c28-788f4aa68a62",
