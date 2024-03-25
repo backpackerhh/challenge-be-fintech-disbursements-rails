@@ -2,7 +2,7 @@
 
 namespace :payments_context do
   namespace :disbursements do
-    desc "Start process to generate disbursements"
+    desc "Start process to generate disbursements (and monthly fees)"
     task generate: [:environment] do
       PaymentsContext::Disbursements::Jobs::GenerateDisbursementsJob.perform_async
 

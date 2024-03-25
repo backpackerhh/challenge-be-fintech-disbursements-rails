@@ -11,6 +11,8 @@ module PaymentsContext
         def size; end
 
         def find_all_grouped_disbursable_ids; end
+
+        def first_in_month_for_merchant?(_merchant_id, _date); end
       end
     end
   end

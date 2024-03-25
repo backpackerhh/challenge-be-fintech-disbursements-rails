@@ -39,6 +39,13 @@ module PaymentsContext
             created_at: created_at.value
           }
         end
+
+        def monthly_fee_applicable?(commissions_amount, previous_month_date)
+          !minimum_monthly_fee.value.zero? &&
+            minimum_monthly_fee.value > commissions_amount &&
+            (live_on.value.year < previous_month_date.year ||
+            (live_on.value.year == previous_month_date.year && live_on.value.month <= previous_month_date.month))
+        end
       end
     end
   end

@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
 module PaymentsContext
-  module OrderCommissions
+  module MonthlyFees
     module Repositories
-      class InMemoryOrderCommissionRepository
+      class InMemoryMonthlyFeeRepository
         def create(_attributes); end
 
         def size; end
-
-        def calculate_monthly_amount(*); end
       end
     end
   end

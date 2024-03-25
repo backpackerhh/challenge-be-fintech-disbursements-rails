@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_24_102556) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_25_122713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -44,6 +44,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_24_102556) do
     t.index ["reference"], name: "index_payments_merchants_on_reference", unique: true
   end
 
+  create_table "payments_monthly_fees", id: :uuid, default: nil, force: :cascade do |t|
+    t.integer "amount_cents", default: 0, null: false
+    t.integer "commissions_amount_cents", default: 0, null: false
+    t.uuid "payments_merchant_id", null: false
+    t.string "month", limit: 7, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payments_merchant_id"], name: "index_payments_monthly_fees_on_payments_merchant_id"
+  end
+
   create_table "payments_order_commissions", id: :uuid, default: nil, force: :cascade do |t|
     t.integer "amount_cents", default: 0, null: false
     t.integer "order_amount_cents", default: 0, null: false
@@ -67,6 +77,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_24_102556) do
   end
 
   add_foreign_key "payments_disbursements", "payments_merchants"
+  add_foreign_key "payments_monthly_fees", "payments_merchants"
   add_foreign_key "payments_order_commissions", "payments_orders"
   add_foreign_key "payments_orders", "payments_disbursements"
   add_foreign_key "payments_orders", "payments_merchants"

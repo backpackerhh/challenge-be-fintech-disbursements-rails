@@ -9,7 +9,7 @@ RSpec.describe PaymentsContext::OrderCommissions::UseCases::CreateOrderCommissio
       {
         "id" => "d1649242-a612-46ba-82d8-225542bb9576",
         "order_id" => "86312006-4d7e-45c4-9c28-788f4aa68a62",
-        "order_amount" => BigDecimal("102.29")
+        "order_amount" => "102.29"
       }
     end
 

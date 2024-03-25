@@ -34,6 +34,16 @@ module PaymentsContext
         def size
           Records::DisbursementRecord.count
         end
+
+        def first_in_month_for_merchant?(merchant_id, date)
+          result = Records::DisbursementRecord
+                   .where(merchant_id:)
+                   .where("start_date >= DATE_TRUNC('month', DATE('#{date}'))")
+                   .where("end_date < (DATE_TRUNC('month', DATE('#{date}')) + INTERVAL '1 month')")
+                   .count
+
+          result == 1
+        end
       end
     end
   end

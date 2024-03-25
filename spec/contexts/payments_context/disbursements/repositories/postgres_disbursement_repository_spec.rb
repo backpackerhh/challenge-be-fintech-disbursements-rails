@@ -83,4 +83,43 @@ RSpec.describe PaymentsContext::Disbursements::Repositories::PostgresDisbursemen
       end
     end
   end
+
+  describe "#first_in_month_for_merchant?(merchant_id, date)" do
+    context "when there is more than one result for given merchant" do
+      it "returns false", freeze_time: Time.parse("2023-04-01 07:00 UTC") do
+        repository = described_class.new
+        merchant = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create
+        PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.create(
+          merchant_id: merchant.id.value,
+          start_date: Date.parse("2023-02-01"),
+          end_date: Date.parse("2023-02-01")
+        )
+        PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.create(
+          merchant_id: merchant.id.value,
+          start_date: Date.parse("2023-02-08"),
+          end_date: Date.parse("2023-02-08")
+        )
+
+        result = repository.first_in_month_for_merchant?(merchant.id.value, Date.parse("2023-02-11"))
+
+        expect(result).to be false
+      end
+    end
+
+    context "when there is exactly one result for given merchant" do
+      it "returns true", freeze_time: Time.parse("2023-04-01 07:00 UTC") do
+        repository = described_class.new
+        merchant = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create
+        PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.create(
+          merchant_id: merchant.id.value,
+          start_date: Date.parse("2023-02-01"),
+          end_date: Date.parse("2023-02-01")
+        )
+
+        result = repository.first_in_month_for_merchant?(merchant.id.value, Date.parse("2023-02-11"))
+
+        expect(result).to be true
+      end
+    end
+  end
 end

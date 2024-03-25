@@ -12,6 +12,14 @@ module PaymentsContext
           end
         end
 
+        def find_by_id(id)
+          merchant = Records::MerchantRecord.find(id)
+
+          Entities::MerchantEntity.from_primitives(merchant.attributes.transform_keys(&:to_sym))
+        rescue ActiveRecord::RecordNotFound => e
+          raise SharedContext::Errors::RecordNotFoundError, e
+        end
+
         def create(attributes)
           Records::MerchantRecord.create!(attributes)
         rescue ActiveRecord::RecordNotUnique => e

@@ -9,7 +9,7 @@ RSpec.describe "payments_context:disbursements:generate", type: %i[task database
     expect(task.prerequisites).to include "environment"
   end
 
-  it "starts process to generate disbursements (only daily and weekly on Sundays here)",
+  it "starts process to generate disbursements and monthly fees (only daily and weekly on Sundays here)",
      :sidekiq_inline, freeze_time: Time.zone.parse("2023-04-02 07:00 UTC") do
     merchant_a = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create(
       :weekly_disbursement,
@@ -37,7 +37,9 @@ RSpec.describe "payments_context:disbursements:generate", type: %i[task database
       minimum_monthly_fee: BigDecimal("15.00")
     )
 
-    # Merchant A - Ignored, disbursed weekly on Fridays
+    # Merchant A
+    # Ignored, disbursed weekly on Fridays
+    # No monthly fees will be created
 
     merchant_a_order_1 = PaymentsContext::Orders::Factories::OrderEntityFactory.create(
       merchant_id: merchant_a.id.value,
@@ -64,7 +66,9 @@ RSpec.describe "payments_context:disbursements:generate", type: %i[task database
       created_at: Time.zone.parse("2023-01-17 07:55:13")
     )
 
-    # Merchant B - 3 ready to be disbursed in different days, 1 discarded from today
+    # Merchant B
+    # 3 orders ready to be disbursed in different days, 1 order discarded from today
+    # 2 monthly fees ready to be created
 
     merchant_b_order_1 = PaymentsContext::Orders::Factories::OrderEntityFactory.create(
       merchant_id: merchant_b.id.value,
@@ -115,7 +119,9 @@ RSpec.describe "payments_context:disbursements:generate", type: %i[task database
       created_at: Time.zone.parse("2023-04-02 06:55:13")
     )
 
-    # Merchant C - 2 orders ready to be disbursed, 2 discarded from today
+    # Merchant C
+    # 2 orders ready to be disbursed, 2 orders discarded from today
+    # No monthly fees will be created
 
     merchant_c_order_1 = PaymentsContext::Orders::Factories::OrderEntityFactory.create(
       merchant_id: merchant_c.id.value,
@@ -166,7 +172,9 @@ RSpec.describe "payments_context:disbursements:generate", type: %i[task database
       created_at: Time.zone.parse("2023-04-02 06:59:13")
     )
 
-    # Merchant D - 4 orders ready to be disbursed in different weeks, 1 discarded from this week
+    # Merchant D
+    # 4 orders ready to be disbursed in different weeks, 1 order discarded from this week
+    # No monthly fees will be created
 
     merchant_d_order_1 = PaymentsContext::Orders::Factories::OrderEntityFactory.create(
       merchant_id: merchant_d.id.value,
@@ -229,7 +237,9 @@ RSpec.describe "payments_context:disbursements:generate", type: %i[task database
       created_at: Time.zone.parse("2023-03-31 16:24:13")
     )
 
-    # Merchant E - 2 orders ready to be disbursed, 1 discarded from this week
+    # Merchant E
+    # 2 orders ready to be disbursed, 1 order discarded from this week
+    # No monthly fees will be created
 
     merchant_e_order_1 = PaymentsContext::Orders::Factories::OrderEntityFactory.create(
       merchant_id: merchant_e.id.value,
@@ -324,5 +334,30 @@ RSpec.describe "payments_context:disbursements:generate", type: %i[task database
 
     # FIXME: remove this example if domain event is used instead of a job from another module
     expect(orders_with_disbursement_id.size).to eq(11)
+
+    repository = PaymentsContext::MonthlyFees::Repositories::PostgresMonthlyFeeRepository.new
+    monthly_fees = repository.all.map do |d|
+      [
+        d.merchant_id.value,
+        d.amount.value.amount,
+        d.commissions_amount.value.amount,
+        d.month.value
+      ]
+    end
+
+    expect(monthly_fees).to contain_exactly(
+      [
+        merchant_b.id.value,
+        BigDecimal("30.00"),
+        BigDecimal("0.00"),
+        "2023-02"
+      ],
+      [
+        merchant_b.id.value,
+        BigDecimal("27.27"),
+        BigDecimal("2.73"),
+        "2023-03"
+      ]
+    )
   end
 end

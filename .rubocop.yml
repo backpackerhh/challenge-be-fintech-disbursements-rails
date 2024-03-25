@@ -23,6 +23,7 @@ Style/GuardClause:
   Enabled: true
   Exclude:
     - app/contexts/shared_context/value_objects/base_value_object.rb
+    - app/contexts/payments_context/disbursements/use_cases/create_disbursement_use_case.rb
 
 Style/IfUnlessModifier:
   Enabled: true
@@ -48,6 +49,7 @@ Metrics/AbcSize:
   Exclude:
     - app/contexts/payments_context/orders/jobs/import_orders_job.rb
     - app/contexts/payments_context/disbursements/entities/disbursement_entity.rb
+    - app/contexts/payments_context/disbursements/use_cases/create_disbursement_use_case.rb
 
 # Naming
 
@@ -68,6 +70,11 @@ Lint/UselessAssignment:
 Rails/SkipsModelValidations:
   Enabled: true
   AllowedMethods: ["update_all"]
+
+Rails/DynamicFindBy:
+  Enabled: true
+  AllowedReceivers:
+    - repository
 
 # RSpec
 
@@ -93,6 +100,7 @@ RSpec/ExampleLength:
   Exclude:
     - spec/lib/tasks/payments_context/disbursements/generate_spec.rb
     - spec/contexts/payments_context/orders/repositories/postgres_order_repository_spec.rb
+    - spec/contexts/payments_context/order_commissions/repositories/postgres_order_commission_repository_spec.rb
 
 RSpec/MessageSpies:
   Enabled: true

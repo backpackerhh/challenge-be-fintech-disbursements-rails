@@ -23,6 +23,29 @@ RSpec.describe PaymentsContext::Merchants::Repositories::PostgresMerchantReposit
     end
   end
 
+  describe "#find_by_id(id)" do
+    context "when merchant is not found" do
+      it "raises an exception" do
+        repository = described_class.new
+
+        expect do
+          repository.find_by_id(1)
+        end.to raise_error(SharedContext::Errors::RecordNotFoundError)
+      end
+    end
+
+    context "when merchant is found" do
+      it "returns the entity" do
+        repository = described_class.new
+        merchant = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create
+
+        found_merchant = repository.find_by_id(merchant.id.value)
+
+        expect(found_merchant).to eq(merchant)
+      end
+    end
+  end
+
   describe "#create(attributes)" do
     context "with duplicated record" do
       it "raises an exception" do
