@@ -16,7 +16,7 @@ module PaymentsContext
 
             CreateMerchantJob.set(wait: delay.seconds).perform_later(raw_merchant.to_h)
 
-            logger.info("Job enqueued for creating merchant #{raw_merchant[:id]}")
+            logger.info("Job enqueued to create merchant #{raw_merchant[:id]}")
           end
         rescue StandardError => e # FIXME: decide what exception/s should be rescued here and what to do with them
           logger.error("Found error processing given file (#{file_path}): #{e.message}")

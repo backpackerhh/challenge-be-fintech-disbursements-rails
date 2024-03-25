@@ -16,6 +16,8 @@ namespace :payments_context do
 
       Rails.logger.info("Job enqueued to import orders from #{args.file_path}")
     rescue StandardError => e
+      Rails.logger.error("Job enqueued to import orders failed: #{e.inspect}")
+
       puts e.inspect
       puts "Example usage: rake payments_context:orders:import_data[<file_path>]"
     end

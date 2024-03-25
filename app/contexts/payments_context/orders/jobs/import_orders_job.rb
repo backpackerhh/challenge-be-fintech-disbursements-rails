@@ -32,7 +32,7 @@ module PaymentsContext
 
             Sidekiq::Client.push_bulk("class" => CreateOrderJob, "args" => chunk.zip)
 
-            logger.info("Jobs enqueued for creating orders")
+            logger.info("Jobs enqueued to create orders")
           end
         rescue StandardError => e # FIXME: decide what exception/s should be rescued here and what to do with them
           logger.error("Found error processing given file (#{file_path}): #{e.message}")

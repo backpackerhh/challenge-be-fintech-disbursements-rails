@@ -28,7 +28,7 @@ module PaymentsContext
             create_disbursement_job_klass.perform_in(delay, attributes)
           end
 
-          logger.info("Disbursable orders for merchant #{merchant_id} successfully grouped")
+          logger.info("Disbursable orders grouped for merchant #{merchant_id}")
         end
       end
     end

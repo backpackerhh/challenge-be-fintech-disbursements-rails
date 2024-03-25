@@ -25,6 +25,8 @@ module PaymentsContext
               group_disbursable_orders_job_klass.perform_async(disbursement_frequency.downcase, merchant_id)
             end
           end
+
+          logger.info("Jobs enqueued to generate disbursements on #{Date.current}")
         end
       end
     end
