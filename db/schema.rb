@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_25_122713) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_25_150410) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_25_122713) do
     t.datetime "updated_at", null: false
     t.index ["payments_merchant_id"], name: "index_payments_disbursements_on_payments_merchant_id"
     t.index ["reference"], name: "index_payments_disbursements_on_reference", unique: true
+    t.index ["start_date", "end_date"], name: "index_payments_disbursements_on_start_date_and_end_date"
   end
 
   create_table "payments_merchants", id: :uuid, default: nil, force: :cascade do |t|
@@ -71,6 +72,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_25_122713) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "payments_disbursement_id"
+    t.index ["created_at"], name: "index_payments_orders_on_created_at"
     t.index ["payments_disbursement_id"], name: "index_payments_orders_on_payments_disbursement_id"
     t.index ["payments_merchant_id"], name: "index_payments_orders_on_payments_merchant_id"
     t.index ["reference"], name: "index_payments_orders_on_reference", unique: true
