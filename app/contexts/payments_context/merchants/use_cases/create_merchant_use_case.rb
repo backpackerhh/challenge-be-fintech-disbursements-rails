@@ -12,7 +12,7 @@ module PaymentsContext
         end
 
         def create(attributes)
-          merchant = Entities::MerchantEntity.from_primitives(attributes)
+          merchant = Entities::MerchantEntity.from_primitives(attributes.transform_keys(&:to_sym))
 
           repository.create(merchant.to_primitives)
 

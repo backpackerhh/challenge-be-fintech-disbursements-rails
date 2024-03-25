@@ -12,7 +12,7 @@ namespace :payments_context do
         raise "File not found"
       end
 
-      PaymentsContext::Merchants::Jobs::ImportMerchantsJob.perform_later(args.file_path)
+      PaymentsContext::Merchants::Jobs::ImportMerchantsJob.perform_async(args.file_path)
 
       Rails.logger.info("Job enqueued to import merchants from #{args.file_path}")
     rescue StandardError => e

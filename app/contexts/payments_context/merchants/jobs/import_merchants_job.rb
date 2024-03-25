@@ -5,8 +5,8 @@ require "smarter_csv"
 module PaymentsContext
   module Merchants
     module Jobs
-      class ImportMerchantsJob < SharedContext::Jobs::ApplicationJob
-        queue_as :import_data
+      class ImportMerchantsJob < SharedContext::Jobs::BaseJob
+        sidekiq_options queue: "import_data"
 
         def perform(file_path)
           raw_merchants = SmarterCSV.process(file_path, headers_in_file: true, col_sep: ";")
@@ -14,7 +14,7 @@ module PaymentsContext
           raw_merchants.each_with_index do |raw_merchant, idx|
             delay = idx * 2 # in seconds
 
-            CreateMerchantJob.set(wait: delay.seconds).perform_later(raw_merchant.to_h)
+            CreateMerchantJob.perform_in(delay, raw_merchant.transform_keys(&:to_s))
 
             logger.info("Job enqueued to create merchant #{raw_merchant[:id]}")
           end
