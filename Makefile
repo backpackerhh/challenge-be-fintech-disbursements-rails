@@ -46,6 +46,9 @@ db-import-data:
 db-disbursements-backfill:
 	@docker compose exec app rake payments_context:disbursements:backfill
 
+db-disbursements-generate:
+	@docker compose exec app rake payments_context:disbursements:generate
+
 start:
 	@docker compose up --build -d $(SERVICES)
 
