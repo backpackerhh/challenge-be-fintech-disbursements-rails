@@ -33,10 +33,10 @@ RSpec.describe PaymentsContext::Disbursements::Repositories::PostgresDisbursemen
     context "with merchant not found" do
       it "raises an exception" do
         repository = described_class.new
-        order = PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.build
+        disbursement = PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.build
 
         expect do
-          repository.create(order.to_primitives)
+          repository.create(disbursement.to_primitives)
         end.to raise_error(SharedContext::Errors::RecordNotFoundError)
       end
     end
@@ -45,12 +45,12 @@ RSpec.describe PaymentsContext::Disbursements::Repositories::PostgresDisbursemen
       it "raises an exception" do
         repository = described_class.new
         merchant = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create
-        order = PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.create(
+        disbursement = PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.create(
           merchant_id: merchant.id.value
         )
 
         expect do
-          repository.create(order.to_primitives)
+          repository.create(disbursement.to_primitives)
         end.to raise_error(SharedContext::Errors::DuplicatedRecordError)
       end
     end
@@ -59,34 +59,45 @@ RSpec.describe PaymentsContext::Disbursements::Repositories::PostgresDisbursemen
       it "raises an exception" do
         repository = described_class.new
         merchant = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create
-        order = PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.build(
+        disbursement = PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.build(
           merchant_id: merchant.id.value
         )
 
         expect do
-          repository.create(order.to_primitives.merge(id: "uuid"))
+          repository.create(disbursement.to_primitives.merge(id: "uuid"))
         end.to raise_error(SharedContext::Errors::InvalidArgumentError)
       end
     end
 
     context "without errors" do
-      it "creates a new order" do
+      it "creates a new disbursement" do
         repository = described_class.new
         merchant = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create
-        order = PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.build(
+        disbursement = PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.build(
           merchant_id: merchant.id.value
         )
 
         expect do
-          repository.create(order.to_primitives)
+          repository.create(disbursement.to_primitives)
         end.to(change { repository.size }.from(0).to(1))
       end
     end
   end
 
   describe "#first_in_month_for_merchant?(merchant_id, date)" do
+    context "when there is no results for given merchant" do
+      it "returns false", freeze_time: Time.zone.parse("2023-04-01 07:00") do
+        repository = described_class.new
+        merchant = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create
+
+        result = repository.first_in_month_for_merchant?(merchant.id.value, Date.parse("2023-02-11"))
+
+        expect(result).to be false
+      end
+    end
+
     context "when there is more than one result for given merchant" do
-      it "returns false", freeze_time: Time.parse("2023-04-01 07:00 UTC") do
+      it "returns false", freeze_time: Time.zone.parse("2023-04-01 07:00") do
         repository = described_class.new
         merchant = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create
         PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.create(
@@ -107,7 +118,7 @@ RSpec.describe PaymentsContext::Disbursements::Repositories::PostgresDisbursemen
     end
 
     context "when there is exactly one result for given merchant" do
-      it "returns true", freeze_time: Time.parse("2023-04-01 07:00 UTC") do
+      it "returns true", freeze_time: Time.zone.parse("2023-04-01 07:00") do
         repository = described_class.new
         merchant = PaymentsContext::Merchants::Factories::MerchantEntityFactory.create
         PaymentsContext::Disbursements::Factories::DisbursementEntityFactory.create(
