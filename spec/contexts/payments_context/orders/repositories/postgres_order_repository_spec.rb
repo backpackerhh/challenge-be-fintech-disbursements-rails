@@ -172,14 +172,14 @@ RSpec.describe PaymentsContext::Orders::Repositories::PostgresOrderRepository, t
         expect(results).to eq(
           [
             {
-              "amount" => BigDecimal("490.24"),
+              "amount" => BigDecimal("485.92"),
               "commissions_amount" => BigDecimal("4.32"),
               "order_ids" => "[\"#{order_1.id.value}\", \"#{order_2.id.value}\"]",
               "start_date" => "2022-11-15",
               "end_date" => "2022-11-15"
             },
             {
-              "amount" => BigDecimal("10.99"),
+              "amount" => BigDecimal("10.88"),
               "commissions_amount" => BigDecimal("0.11"),
               "order_ids" => "[\"#{order_4.id.value}\"]",
               "start_date" => "2023-04-13",
@@ -273,14 +273,14 @@ RSpec.describe PaymentsContext::Orders::Repositories::PostgresOrderRepository, t
         expect(results).to eq(
           [
             {
-              "amount" => BigDecimal("490.24"),
+              "amount" => BigDecimal("485.92"),
               "commissions_amount" => BigDecimal("4.32"),
               "order_ids" => "[\"#{order_1.id.value}\", \"#{order_2.id.value}\"]",
               "start_date" => "2022-11-14",
               "end_date" => "2022-11-20"
             },
             {
-              "amount" => BigDecimal("1399.95"),
+              "amount" => BigDecimal("1388.05"),
               "commissions_amount" => BigDecimal("11.90"),
               "order_ids" => "[\"#{order_3.id.value}\"]",
               "start_date" => "2023-01-02",

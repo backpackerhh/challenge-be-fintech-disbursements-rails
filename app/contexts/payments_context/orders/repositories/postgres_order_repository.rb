@@ -42,7 +42,7 @@ module PaymentsContext
                   DATE(o.created_at) AS start_date,
                   DATE(o.created_at) AS end_date,
                   JSON_AGG(o.id) AS order_ids,
-                  SUM(o.amount_cents) / 100.0 AS amount,
+                  (SUM(o.amount_cents) - SUM(oc.amount_cents)) / 100.0 AS amount,
                   SUM(oc.amount_cents) / 100.0 as commissions_amount
                 FROM payments_orders o
                 JOIN payments_order_commissions oc
@@ -61,7 +61,7 @@ module PaymentsContext
                   DATE(DATE_TRUNC('week', o.created_at)) AS start_date,
                   DATE(DATE_TRUNC('week', o.created_at) + INTERVAL '6 days') AS end_date,
                   JSON_AGG(o.id) AS order_ids,
-                  SUM(o.amount_cents) / 100.0 AS amount,
+                  (SUM(o.amount_cents) - SUM(oc.amount_cents)) / 100.0 AS amount,
                   SUM(oc.amount_cents) / 100.0 as commissions_amount
                 FROM payments_orders o
                 JOIN payments_order_commissions oc

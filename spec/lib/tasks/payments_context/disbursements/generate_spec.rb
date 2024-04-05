@@ -293,37 +293,37 @@ RSpec.describe "payments_context:disbursements:generate", type: %i[task database
     expect(disbursements).to contain_exactly(
       [
         merchant_b.id.value,
-        BigDecimal("317.24"),
+        BigDecimal("314.51"),
         BigDecimal("2.73"),
         [merchant_b_order_1.id.value, merchant_b_order_2.id.value]
       ],
       [
         merchant_b.id.value,
-        BigDecimal("261.13"),
+        BigDecimal("258.64"),
         BigDecimal("2.49"),
         [merchant_b_order_3.id.value]
       ],
       [
         merchant_c.id.value,
-        BigDecimal("490.24"),
+        BigDecimal("485.92"),
         BigDecimal("4.32"),
         [merchant_c_order_1.id.value, merchant_c_order_2.id.value]
       ],
       [
         merchant_d.id.value,
-        BigDecimal("1583.99"),
+        BigDecimal("1570.40"),
         BigDecimal("13.59"),
         [merchant_d_order_1.id.value, merchant_d_order_2.id.value, merchant_d_order_3.id.value]
       ],
       [
         merchant_d.id.value,
-        BigDecimal("50.0"),
+        BigDecimal("49.52"),
         BigDecimal("0.48"),
         [merchant_d_order_4.id.value]
       ],
       [
         merchant_e.id.value,
-        BigDecimal("57.98"),
+        BigDecimal("57.42"),
         BigDecimal("0.56"),
         [merchant_e_order_1.id.value, merchant_e_order_2.id.value]
       ]
